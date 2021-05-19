@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 import pl.infoshare.requests.vehicles.model.Vehicle;
-import pl.infoshare.requests.vehicles.model.VehicleType;
 import pl.infoshare.requests.vehicles.model.VehicleUpdateRequest;
 
 import javax.annotation.PostConstruct;
@@ -13,8 +12,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static pl.infoshare.requests.vehicles.model.Vehicle.bus;
 import static pl.infoshare.requests.vehicles.model.Vehicle.tram;
