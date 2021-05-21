@@ -18,8 +18,8 @@ PUT http://localhost:8080/vehicles/GTC001-Tczew-2
 Content-Type: application/json
 
 {
-  "lastReviewDate": "2021-05-01",
-  "lastMileage": 95000
+  "lastReview": "2021-05-01",
+  "lastReviewMileage": 95000
 }
 
 ###
