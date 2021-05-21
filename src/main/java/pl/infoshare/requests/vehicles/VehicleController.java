@@ -1,33 +1,37 @@
 package pl.infoshare.requests.vehicles;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import pl.infoshare.requests.vehicles.model.Vehicle;
+import pl.infoshare.requests.vehicles.model.VehicleUpdateRequest;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class VehicleController {
 
     private final VehicleRepository vehicleRepository;
     private final VehicleFindService vehicleFindService;
 
-    @RequestMapping("/vehicles")
+    @GetMapping("/vehicles")
     public List<Vehicle> findAllVehicles() {
         return vehicleFindService.findVehicles();
     }
 
     @PostMapping("/vehicles")
-    public void createVehicle(Vehicle vehicle) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createVehicle(@RequestBody Vehicle vehicle) {
         vehicleRepository.save(vehicle);
     }
 
-    @DeleteMapping("/vehicles/{identifier}")
+    @PutMapping("/vehicles/{reg:[A-Z0-9]+}-{cit:[A-Za-z]+}-{id}")
+    public void updateVehicle(@PathVariable int id, @RequestBody VehicleUpdateRequest vehicleUpdate) {
+        vehicleRepository.update(id, vehicleUpdate);
+    }
+
+    @DeleteMapping("/vehicles/{id}")
     public void deleteVehicle(@PathVariable int id) {
         vehicleRepository.delete(id);
     }
