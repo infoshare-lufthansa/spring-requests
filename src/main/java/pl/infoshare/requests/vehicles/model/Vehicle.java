@@ -5,6 +5,7 @@ import lombok.With;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Value
 public class Vehicle {
@@ -18,4 +19,11 @@ public class Vehicle {
     @With
     BigDecimal lastReviewMileage;
     String city;
+
+    public boolean needsReview() {
+        var monthsSinceLastReview = ChronoUnit.MONTHS.between(lastReviewDate, LocalDate.now());
+        var mileageSinceLastReview = mileage.subtract(lastReviewMileage);
+
+        return monthsSinceLastReview > type.getMaxMonths() || mileageSinceLastReview.compareTo(type.getMaxMileage()) > 0;
+    }
 }
