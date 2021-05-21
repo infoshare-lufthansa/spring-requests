@@ -2,7 +2,6 @@ package pl.infoshare.requests.vehicles;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.infoshare.requests.vehicles.model.PageRequest;
 import pl.infoshare.requests.vehicles.model.Vehicle;
 import pl.infoshare.requests.vehicles.model.VehicleSearch;
 
@@ -15,14 +14,12 @@ public class VehicleFindService {
 
     private final VehicleRepository vehicleRepository;
 
-    public List<Vehicle> findVehicles(VehicleSearch vehicleSearch, PageRequest pageRequest) {
+    public List<Vehicle> findVehicles(VehicleSearch vehicleSearch) {
         return vehicleRepository.findAll()
                 .stream()
                 .filter(vehicleSearch::hasCorrectCity)
                 .filter(vehicleSearch::hasCorrectType)
                 .filter(vehicleSearch::hasCorrectMileage)
-                .skip(pageRequest.getPage() * pageRequest.getPageSize())
-                .limit(pageRequest.getPageSize())
                 .collect(Collectors.toList());
     }
 

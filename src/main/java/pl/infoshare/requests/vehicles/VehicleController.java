@@ -14,6 +14,7 @@ import pl.infoshare.requests.vehicles.model.VehicleUpdateRequest;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,15 +26,19 @@ public class VehicleController {
     private final VehicleRepository vehicleRepository;
     private final VehicleFindService vehicleFindService;
 
-    @GetMapping(value = "/vehicles")
+    @GetMapping("/vehicles")
     public ResponseEntity<List<Vehicle>> findAllVehicles(VehicleSearch search,
                                                          PageRequest pageRequest,
                                                          @RequestHeader(CITY_HEADER) @Nullable String city) {
-        var foundVehicles = vehicleFindService.findVehicles(search.withCity(city), pageRequest);
+        var foundVehicles = vehicleFindService.findVehicles(search.withCity(city));
+        var pagedVehicles = foundVehicles.stream()
+                .skip(pageRequest.getPage() * pageRequest.getPageSize())
+                .limit(pageRequest.getPageSize())
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER, String.valueOf(foundVehicles.size()))
-                .body(foundVehicles);
+                .body(pagedVehicles);
     }
 
     @GetMapping(value = "/vehicles", params = "needsReview")
