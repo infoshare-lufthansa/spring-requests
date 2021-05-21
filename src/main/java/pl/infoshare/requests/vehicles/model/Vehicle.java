@@ -6,13 +6,12 @@ import lombok.With;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.time.temporal.ChronoUnit;
 
 @Value
 public class Vehicle {
-    private static AtomicInteger idGenerator = new AtomicInteger(1);
-
-    Integer id = idGenerator.getAndIncrement();
+    @With
+    Integer id;
     VehicleType type;
     BigDecimal mileage;
     String registrationNumber;
@@ -21,14 +20,6 @@ public class Vehicle {
     @With
     BigDecimal lastReviewMileage;
     String city;
-
-    public static Vehicle bus(BigDecimal mileage, String registrationNumber, LocalDate lastReviewDate, BigDecimal lastReviewMileage, String city) {
-        return new Vehicle(VehicleType.BUS, mileage, registrationNumber, lastReviewDate, lastReviewMileage, city);
-    }
-
-    public static Vehicle tram(BigDecimal mileage, String registrationNumber, LocalDate lastReviewDate, BigDecimal lastReviewMileage, String city) {
-        return new Vehicle(VehicleType.TRAM, mileage, registrationNumber, lastReviewDate, lastReviewMileage, city);
-    }
 
     public boolean needsReview() {
         var monthsSinceLastReview = ChronoUnit.MONTHS.between(lastReviewDate, LocalDate.now());

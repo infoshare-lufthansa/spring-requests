@@ -26,11 +26,12 @@ public class VehicleController {
     private final VehicleRepository vehicleRepository;
     private final VehicleFindService vehicleFindService;
 
-    @GetMapping("/vehicles")
+    @GetMapping(value = "/vehicles")
     public ResponseEntity<List<Vehicle>> findAllVehicles(VehicleSearch search,
                                                          PageRequest pageRequest,
                                                          @RequestHeader(CITY_HEADER) @Nullable String city) {
         var foundVehicles = vehicleFindService.findVehicles(search.withCity(city));
+
         var pagedVehicles = foundVehicles.stream()
                 .skip(pageRequest.getPage() * pageRequest.getPageSize())
                 .limit(pageRequest.getPageSize())

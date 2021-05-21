@@ -1,0 +1,26 @@
+GET http://localhost:8080/vehicles
+
+###
+POST http://localhost:8080/vehicles
+Content-Type: application/json
+
+{
+  "type": "BUS",
+  "mileage": 61000,
+  "registrationNumber": "WAW003",
+  "lastReviewDate": "2021-01-01",
+  "lastReviewMileage": 52000,
+  "city": "Warszawa"
+}
+
+###
+PUT http://localhost:8080/vehicles/GTC001-Tczew-2
+Content-Type: application/json
+
+{
+  "lastReview": "2021-05-01",
+  "lastReviewMileage": 95000
+}
+
+###
+DELETE http://localhost:8080/vehicles/3
