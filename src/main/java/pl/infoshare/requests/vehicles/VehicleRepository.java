@@ -50,7 +50,7 @@ public class VehicleRepository {
         vehicles.replaceAll(v -> v.getId().equals(updatedVehicle.getId()) ? updatedVehicle : v);
     }
 
-    public void delete(Integer id) {
-        vehicles.removeIf(v -> v.getId().equals(id));
+    public boolean delete(Integer id) {
+        return vehicles.removeIf(v -> v.getId().equals(id));
     }
 }

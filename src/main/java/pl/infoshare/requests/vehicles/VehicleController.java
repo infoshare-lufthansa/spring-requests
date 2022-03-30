@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
-import pl.infoshare.requests.vehicles.model.PageRequest;
 import pl.infoshare.requests.vehicles.model.Vehicle;
 import pl.infoshare.requests.vehicles.model.VehicleSearch;
 import pl.infoshare.requests.vehicles.model.VehicleUpdateRequest;
@@ -28,15 +27,11 @@ public class VehicleController {
 
     @GetMapping(value = "/vehicles")
     public ResponseEntity<List<Vehicle>> findAllVehicles(VehicleSearch search,
-                                                         PageRequest pageRequest,
+                                                         @RequestParam(defaultValue = "3") Long limit,
                                                          @RequestHeader(CITY_HEADER) @Nullable String city) {
         var foundVehicles = vehicleFindService.findVehicles(search.withCity(city));
 
-        var pagedVehicles = foundVehicles.stream()
-                .skip(pageRequest.getPage() * pageRequest.getPageSize())
-                .limit(pageRequest.getPageSize())
-                .collect(Collectors.toList());
-
+        var pagedVehicles = foundVehicles.stream().limit(limit).collect(Collectors.toList());
         return ResponseEntity.ok()
                 .header(TOTAL_COUNT_HEADER, String.valueOf(foundVehicles.size()))
                 .body(pagedVehicles);
@@ -61,7 +56,12 @@ public class VehicleController {
     }
 
     @DeleteMapping("/vehicles/{id}")
-    public void deleteVehicle(@PathVariable int id) {
-        vehicleRepository.delete(id);
+    public ResponseEntity<Void> deleteVehicle(@PathVariable int id) {
+        var result = vehicleRepository.delete(id);
+        if (result) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
     }
 }
