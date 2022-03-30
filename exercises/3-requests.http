@@ -1,6 +1,12 @@
-GET http://localhost:8080/vehicles?page=1&pageSize=2
+GET http://localhost:8080/vehicles?limit=3
 X-CITY: Tczew
 
 ###
 GET http://localhost:8080/vehicles?needsReview
+
+###
+DELETE http://localhost:8080/vehicles/3
+
+###
+DELETE http://localhost:8080/1234
 
